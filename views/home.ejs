@@ -1,0 +1,46 @@
+<%- include('partials/header') %>
+
+<h1>Які слова вчимо?</h1>
+
+<div class="deck-list">
+  <% decks.forEach(function (deck) { %>
+    <a class="deck" href="<%= base %>study/<%= deck.id %>/" data-from="<%= deck.from %>" data-to="<%= deck.to %>">
+      <div class="deck-head">
+        <span class="deck-title"><%= deck.title %></span>
+        <span class="deck-count"><span class="learned">0</span>/<%= deck.size %> вивчено</span>
+      </div>
+      <% if (deck.subtitle) { %><div class="deck-sub"><%= deck.subtitle %></div><% } %>
+      <div class="bar"><div class="bar-fill"></div></div>
+    </a>
+  <% }) %>
+</div>
+
+<p class="muted">Англійська → українська. Що не знаєш, повертається в колоду, доки не вивчиш.</p>
+<button type="button" class="btn btn-link" id="reset-all">Скинути весь прогрес</button>
+
+<script src="<%= base %>js/progress.js"></script>
+<script>
+  function renderDecks() {
+    document.querySelectorAll('.deck').forEach(function (el) {
+      var from = +el.dataset.from, to = +el.dataset.to;
+      var n = Progress.countLearned(from, to);
+      el.querySelector('.learned').textContent = n;
+      el.querySelector('.bar-fill').style.width = (100 * n / (to - from + 1)) + '%';
+    });
+  }
+  var resetBtn = document.getElementById('reset-all');
+  resetBtn.addEventListener('click', function () {
+    if (resetBtn.dataset.confirm) {
+      Progress.resetAll();
+      renderDecks();
+      resetBtn.textContent = 'Скинути весь прогрес';
+      delete resetBtn.dataset.confirm;
+    } else {
+      resetBtn.dataset.confirm = '1';
+      resetBtn.textContent = 'Натисни ще раз, щоб підтвердити';
+    }
+  });
+  renderDecks();
+</script>
+
+<%- include('partials/footer') %>

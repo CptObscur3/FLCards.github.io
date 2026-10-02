@@ -1,0 +1,50 @@
+<%- include('partials/header') %>
+
+<div class="study-top">
+  <div class="bar"><div class="bar-fill" id="progress"></div></div>
+  <div class="study-meta">
+    <span>Колода <%= deck.title %> · Залишилось: <b id="remaining">0</b></span>
+    <label class="toggle"><input type="checkbox" id="reverse"> UA → EN</label>
+  </div>
+</div>
+
+<section id="study">
+  <div class="card" id="card" tabindex="0" aria-live="polite">
+    <div class="card-inner">
+      <div class="card-face card-front">
+        <div class="word" id="front-word"></div>
+        <div class="hint">натисни, щоб перевернути</div>
+      </div>
+      <div class="card-face card-back">
+        <div class="word" id="back-word"></div>
+        <div class="hint" id="back-hint"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="actions" id="actions-front">
+    <button type="button" class="btn btn-primary" id="flip-btn">Показати переклад</button>
+  </div>
+  <div class="actions two" id="actions-back" hidden>
+    <button type="button" class="btn btn-bad" id="unknown-btn">Не знаю</button>
+    <button type="button" class="btn btn-good" id="known-btn">Знаю</button>
+  </div>
+  <p class="muted keys">Пробіл — перевернути · ← не знаю · → знаю</p>
+</section>
+
+<section id="done" class="done" hidden>
+  <h2>Готово! 🎉</h2>
+  <p>Усі слова з цієї колоди вивчено.</p>
+  <button type="button" class="btn btn-primary" id="restart-btn">Пройти колоду знову</button>
+</section>
+
+<a class="btn" href="<%= base %>">Завершити</a>
+
+<script>
+  window.DECK = { from: <%= deck.from %>, to: <%= deck.to %> };
+  window.WORDS = <%- JSON.stringify(words).replace(/</g, '\\u003c') %>;
+</script>
+<script src="<%= base %>js/progress.js"></script>
+<script src="<%= base %>js/study.js"></script>
+
+<%- include('partials/footer') %>

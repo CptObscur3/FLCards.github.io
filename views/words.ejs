@@ -1,0 +1,36 @@
+<%- include('partials/header') %>
+
+<h1>Словник</h1>
+<input type="search" id="search" class="search" placeholder="Пошук англійською або українською…" autocomplete="off">
+
+<div class="table-wrap">
+  <table class="words">
+    <thead><tr><th>#</th><th>English</th><th>Українська</th><th></th></tr></thead>
+    <tbody>
+      <% words.forEach(function (w) { %>
+        <tr data-id="<%= w.id %>">
+          <td class="num"><%= w.id %></td>
+          <td class="en"><%= w.en %></td>
+          <td><%= w.uk %></td>
+          <td class="status"></td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>
+
+<script src="<%= base %>js/progress.js"></script>
+<script>
+  var rows = Array.prototype.slice.call(document.querySelectorAll('tbody tr'));
+  rows.forEach(function (tr) {
+    if (Progress.isLearned(+tr.dataset.id)) tr.querySelector('.status').textContent = '✓';
+  });
+  document.getElementById('search').addEventListener('input', function (e) {
+    var q = e.target.value.trim().toLowerCase();
+    rows.forEach(function (tr) {
+      tr.hidden = q && tr.textContent.toLowerCase().indexOf(q) === -1;
+    });
+  });
+</script>
+
+<%- include('partials/footer') %>
